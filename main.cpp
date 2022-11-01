@@ -1,8 +1,8 @@
-#include "game.h"
+#include "gamea.h"
 
 int main()
 {
-    Game game;
+    GameA game;
     game.loop();
     return 0;
 }

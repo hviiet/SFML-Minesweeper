@@ -1,7 +1,8 @@
-#ifndef GAME_H // minesweeper
-#define GAME_H // minesweeper
+#ifndef CORE_H
+#define CORE_H
 
 #include "SFML/Graphics.hpp"
+#include "graphic.h"
 #include <time.h>
 #include <math.h>
 #include <iostream>
@@ -9,19 +10,11 @@
 using namespace std;
 using namespace sf;
 
-class Game
+class Core
 {
-public:          // initial function and main loop
-    Game();      // generate
-    void loop(); // main loop of the game
-
-private:                       // function
-    void render();             // render playing field
-    void update();             // update
-    void handle_Events();      // handle mouse clicking event
-    void get_Mouse_Position(); // to get mouse position
-
-private:                           // support function
+public:
+    void init();
+    void get_Mouse_Position();
     void load_Assets();            // load the needed image
     void choose_Difficulty();      // choose easy-medium-hard difficulty
     void set_Difficulty(int diff); // set the difficulty
@@ -31,19 +24,25 @@ private:                           // support function
     void reset_Grid();             // reset the saving and showing grid
     bool check_If_Winning();       // check if player is winning or not
     bool check_If_Losing();        // check if player is losing or not
+    friend class GameA;
 
-private: // window
+private:
+    Graphic graphic;
+
+public: // window
     RenderWindow app;
 
-private: // asset
-    Texture t1, t2, t3, t4, t5, t6, t7;
-    Sprite background, asset, button, difficulty_button, select_button, winning, losing;
+private:
     const int Window_Size_X = 1900;
     const int Window_Size_Y = 900;
 
 private: // mouse position
     Vector2i pos;
     int x, y;
+
+private: // asset
+    Texture t1, t2, t3, t4, t5, t6, t7;
+    Sprite background, asset, button, difficulty_button, select_button, winning, losing;
 
 private: // saving and showing array
     int base_Grid[33][19];
@@ -57,5 +56,4 @@ private: // difficulty adjust
     int diff_pos_x;
     int diff_pos_y;
 };
-
-#endif // GAME_H
+#endif // CORE_H
