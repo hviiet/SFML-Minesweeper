@@ -12,27 +12,27 @@ using namespace sf;
 
 class Core
 {
-public:
+    friend class Game;
+
+private:
     void init();
     void get_Mouse_Position();
     void load_Assets();            // load the needed image
     void choose_Difficulty();      // choose easy-medium-hard difficulty
     void set_Difficulty(int diff); // set the difficulty
+    void create_Random_Mines();    // create random mines
     void create_Grid();            // create the grid with the difficulty
     void check(int x, int y);      // used for tracker()
     void tracker(int x, int y);    // to track all the number when click a blank square
     void reset_Grid();             // reset the saving and showing grid
     bool check_If_Winning();       // check if player is winning or not
     bool check_If_Losing();        // check if player is losing or not
-    friend class GameA;
 
 private:
     Graphic graphic;
 
-public: // window
+private: // window
     RenderWindow app;
-
-private:
     const int Window_Size_X = 1900;
     const int Window_Size_Y = 900;
 
@@ -41,8 +41,8 @@ private: // mouse position
     int x, y;
 
 private: // asset
-    Texture t1, t2, t3, t4, t5, t6, t7;
-    Sprite background, asset, button, difficulty_button, select_button, winning, losing;
+    Texture t_background, t_play_exit, t_difficulty, t_restart_back, t_asset, t_playing_win_lose, t_title;
+    Sprite background, play_exit, difficulty, restart_back, asset, playing_win_lose, title;
 
 private: // saving and showing array
     int base_Grid[33][19];

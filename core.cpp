@@ -6,10 +6,9 @@ void Core::init()
     choose_Difficulty();
     create_Grid();
 }
-void Core::create_Grid()
+void Core::create_Random_Mines()
 {
     srand(time(0));
-    reset_Grid();
     for (int i = 1; i <= diff_mines; i++)
     {
         int mines, temp_x, temp_y;
@@ -24,7 +23,11 @@ void Core::create_Grid()
         } while (base_Grid[temp_x][temp_y] == 9);
         base_Grid[temp_x][temp_y] = 9;
     }
-
+}
+void Core::create_Grid()
+{
+    reset_Grid();
+    create_Random_Mines();
     for (int i = 1; i <= diff_size_x; i++)
         for (int j = 1; j <= diff_size_y; j++)
         {
@@ -59,19 +62,16 @@ void Core::check(int x, int y)
         show_Grid[x - 1][y] = base_Grid[x - 1][y];
     if (base_Grid[x - 1][y + 1] > 0 && base_Grid[x - 1][y + 1] < 9)
         show_Grid[x - 1][y + 1] = base_Grid[x - 1][y + 1];
-
     if (base_Grid[x][y - 1] > 0 && base_Grid[x][y - 1] < 9)
         show_Grid[x][y - 1] = base_Grid[x][y - 1];
     if (base_Grid[x][y + 1] > 0 && base_Grid[x][y + 1] < 9)
         show_Grid[x][y + 1] = base_Grid[x][y + 1];
-
     if (base_Grid[x + 1][y - 1] > 0 && base_Grid[x + 1][y - 1] < 9)
         show_Grid[x + 1][y - 1] = base_Grid[x + 1][y - 1];
     if (base_Grid[x + 1][y] > 0 && base_Grid[x + 1][y] < 9)
         show_Grid[x + 1][y] = base_Grid[x + 1][y];
     if (base_Grid[x + 1][y + 1] > 0 && base_Grid[x + 1][y + 1] < 9)
         show_Grid[x + 1][y + 1] = base_Grid[x + 1][y + 1];
-    return;
 }
 void Core::tracker(int x, int y)
 {
@@ -133,61 +133,75 @@ void Core::set_Difficulty(int diff)
 }
 void Core::load_Assets()
 {
-    graphic.load_And_Set_Texture(background, t1, "src/images/background.png");
-    graphic.load_And_Set_Texture(button, t3, "src/images/restart.png");
-    graphic.load_And_Set_Texture(difficulty_button, t4, "src/images/diff-button.png");
-    graphic.load_And_Set_Texture(select_button, t5, "src/images/select-button.png");
-    graphic.load_And_Set_Texture(winning, t6, "src/images/winning.png");
-    graphic.load_And_Set_Texture(losing, t7, "src/images/losing.png");
+    graphic.load_And_Set_Texture(background, t_background, "src/images/background.png");
+    graphic.load_And_Set_Texture(play_exit, t_play_exit, "src/images/play_exit.png");
+    graphic.load_And_Set_Texture(difficulty, t_difficulty, "src/images/difficulty.png");
+    graphic.load_And_Set_Texture(restart_back, t_restart_back, "src/images/restart_back.png");
+    graphic.load_And_Set_Texture(playing_win_lose, t_playing_win_lose, "src/images/playing_win_lose.png");
+    graphic.load_And_Set_Texture(title, t_title, "src/images/title.png");
 }
 void Core::choose_Difficulty()
 {
+    int which_case = 0;
     while (app.isOpen())
     {
-        graphic.load_And_Set_Texture(background, t1, "src/images/background.png");
         Vector2i pos = Mouse::getPosition(app);
         Event e;
         while (app.pollEvent(e))
         {
             if (e.type == Event::Closed)
                 app.close();
-
             if (e.type == Event::MouseButtonPressed)
                 if (e.mouseButton.button == Mouse::Left)
                 {
-                    if (pos.x > 500 && pos.x < 500 + 290 && pos.y > 200 && pos.y < 200 + 100)
+                    if (which_case == 0)
                     {
-                        set_Difficulty(1);
-                        graphic.load_And_Set_Texture(background, t1, "src/images/background-easy.png");
-                        graphic.load_And_Set_Texture(asset, t2, "src/images/diff-easy.png");
-                        return;
+                        if (pos.x > 700 && pos.x < 700 + 500 && pos.y > 450 && pos.y < 450 + 209 / 2)
+                        {
+                            which_case = 1;
+                        }
+                        else if (pos.x > 700 && pos.x < 700 + 500 && pos.y > 650 && pos.y < 650 + 209 / 2)
+                        {
+                            app.close();
+                        }
                     }
-                    else if (pos.x > 500 && pos.x < 500 + 290 && pos.y > 400 && pos.y < 400 + 100)
+                    if (which_case == 1)
                     {
-                        set_Difficulty(2);
-                        graphic.load_And_Set_Texture(background, t1, "src/images/background-easy.png");
-                        graphic.load_And_Set_Texture(asset, t2, "src/images/diff-medium-hard.png");
-                        return;
-                    }
-                    else if (pos.x > 500 && pos.x < 500 + 290 && pos.y > 600 && pos.y < 600 + 100)
-                    {
-                        set_Difficulty(3);
-                        graphic.load_And_Set_Texture(background, t1, "src/images/background-hard.png");
-                        graphic.load_And_Set_Texture(asset, t2, "src/images/diff-medium-hard.png");
-                        return;
+                        if (pos.x > 700 && pos.x < 700 + 500 && pos.y > 350 && pos.y < 350 + 310 / 3)
+                        {
+                            set_Difficulty(1);
+                            graphic.load_And_Set_Texture(asset, t_asset, "src/images/diff-easy4.png");
+                            return;
+                        }
+                        else if (pos.x > 700 && pos.x < 700 + 500 && pos.y > 550 && pos.y < 550 + 310 / 3)
+                        {
+                            set_Difficulty(2);
+                            graphic.load_And_Set_Texture(asset, t_asset, "src/images/diff-medium-hard4.png");
+                            return;
+                        }
+                        else if (pos.x > 700 && pos.x < 700 + 500 && pos.y > 750 && pos.y < 750 + 310 / 3)
+                        {
+                            set_Difficulty(3);
+                            graphic.load_And_Set_Texture(asset, t_asset, "src/images/diff-medium-hard4.png");
+                            return;
+                        }
                     }
                 }
         }
         graphic.clear_Render(app, Color::Black);
-
         graphic.draw_Render(app, background, 0, 0, 1900, 900, 0, 0);
-
-        graphic.draw_Render(app, difficulty_button, 0, 0, 290, 100, 500, 200);
-
-        graphic.draw_Render(app, difficulty_button, 0, 100, 290, 100, 500, 400);
-
-        graphic.draw_Render(app, difficulty_button, 0, 200, 290, 100, 500, 600);
-
+        graphic.draw_Render(app, title, 0, 0, 1100, 246, 400, 60);
+        if (which_case == 0)
+        {
+            graphic.draw_Render(app, play_exit, 0, 0, 500, 209 / 2, 700, 450);
+            graphic.draw_Render(app, play_exit, 0, 209 / 2, 500, 209 / 2, 700, 650);
+        }
+        if (which_case == 1)
+        {
+            graphic.draw_Render(app, difficulty, 0, 0, 500, 310 / 3, 700, 350);
+            graphic.draw_Render(app, difficulty, 0, 207, 500, 310 / 3, 700, 550);
+            graphic.draw_Render(app, difficulty, 0, 310 / 3, 500, 310 / 3, 700, 750);
+        }
         graphic.display_Render(app);
     }
 }
